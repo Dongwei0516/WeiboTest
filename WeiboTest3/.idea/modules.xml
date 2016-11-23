@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/WeiboTest3.iml" filepath="$PROJECT_DIR$/WeiboTest3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/weiboSDK/weiboSDK.iml" filepath="$PROJECT_DIR$/weiboSDK/weiboSDK.iml" />
+      <module fileurl="file://$PROJECT_DIR$/weiboSDKDemo/weiboSDKDemo.iml" filepath="$PROJECT_DIR$/weiboSDKDemo/weiboSDKDemo.iml" />
+    </modules>
+  </component>
+</project>

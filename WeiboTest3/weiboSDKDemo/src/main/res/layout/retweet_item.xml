@@ -1,0 +1,135 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/retweet_weibo_item"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:paddingBottom="4dp"
+    android:descendantFocusability="beforeDescendants"
+    android:paddingLeft="8dip"
+    android:paddingRight="8dip"
+    android:paddingTop="6dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/head_logo"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:clickable="true"
+                android:src="@drawable/ic_logo"
+                android:layout_marginRight="8dp"/>
+
+            <TextView
+                android:id="@+id/tv_Name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/head_logo"
+                android:text="Name"
+                android:clickable="true"
+                android:textColor="#3366CC"
+                android:textSize="14dp"/>
+
+            <TextView
+                android:id="@+id/tv_Time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_Name"
+                android:layout_toRightOf="@id/head_logo"
+                android:text="time"
+                android:textColor="#828282"
+                android:textSize="12dp"/>
+
+            <TextView
+                android:id="@+id/tv_From"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/tv_Time"
+                android:layout_below="@id/tv_Name"
+                android:layout_marginLeft="10dp"
+                android:text="from"
+                android:textColor="#828282"
+                android:textSize="12dp"/>
+
+            <TextView
+                android:id="@+id/tv_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/head_logo"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="10dp"
+                android:lineSpacingExtra="2dp"
+                android:text="转发"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/retweet_weibo_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:background="@drawable/retweetstyle">
+
+            <ImageView
+                android:id="@+id/oringin_head_logo"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:clickable="true"
+                android:src="@drawable/ic_logo"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"/>
+
+            <TextView
+                android:id="@+id/origin_Name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/oringin_head_logo"
+                android:text="Name"
+                android:clickable="true"
+                android:textColor="#3366CC"
+                android:textSize="14dp"/>
+
+
+            <TextView
+                android:id="@+id/retweet_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/oringin_head_logo"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:lineSpacingExtra="3dp"
+                android:text="\@name : content"
+                android:textColor="#5d5d5d"
+                android:textSize="15dp"/>
+
+        </RelativeLayout>
+
+        <com.dongwei.weibotest3.NineGridView
+            android:id="@+id/retweet_grid_view"
+            android:numColumns="3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </com.dongwei.weibotest3.NineGridView>
+
+        <!--<ImageView-->
+            <!--android:id="@+id/retweet_img"-->
+            <!--android:src="@drawable/ic_logo"-->
+            <!--android:clickable="true"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content" />-->
+
+        <include layout="@layout/item_weibo_bottom"/>
+    </LinearLayout>
+</RelativeLayout>
