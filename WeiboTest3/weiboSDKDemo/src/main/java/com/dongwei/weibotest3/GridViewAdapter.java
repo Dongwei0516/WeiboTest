@@ -81,8 +81,8 @@ public class GridViewAdapter extends BaseAdapter {
         }
 
 //        ImageView img =new ImageView(mContext);
-        ImageLoader.getInstance().displayImage(gridImageViews.get(position),holder.imageView);
-//        Log.d("img===", String.valueOf(img));
+        ImageLoader.getInstance().displayImage(gridImageViews.get(position).replace("thumbnail", "bmiddle"),holder.imageView);
+//        Log.d("img===", String.valueOf(holder.imageView));
 //        holder.imageView.setBackground(img.getDrawable());
         holder.imageView.setTag(gridImageViews.get(position));
 

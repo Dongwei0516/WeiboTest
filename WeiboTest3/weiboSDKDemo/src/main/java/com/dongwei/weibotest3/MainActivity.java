@@ -16,8 +16,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -66,10 +64,14 @@ public class MainActivity extends FragmentActivity {
     private ImageView mPostTab;
     public ImageLoader imageLoader = ImageLoader.getInstance();
     private List<ArrayList<String>> list = new ArrayList<ArrayList<String>>();
+//    private ArrayList<String> imageDatas;
+
 
     private long mExitTime;
     private static final int TYPE_ORINGIN_ITEM = 0;
     private static final int TYPE_RETWEET_ITEM = 3;
+
+    private NineImgView.ClickCallback callback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -163,6 +165,7 @@ public class MainActivity extends FragmentActivity {
             final String retweetFollowsCount;
             String weiboTime;
 
+
             userId = mStatus.statusList.get(position).user.id;
             userName = mStatus.statusList.get(position).user.screen_name;
             userDesc = mStatus.statusList.get(position).user.description;
@@ -171,88 +174,57 @@ public class MainActivity extends FragmentActivity {
             friendsCount = mStatus.statusList.get(position).user.friends_count+"";
             userImg = mStatus.statusList.get(position).user.avatar_hd;
 
+            weiboTime = mStatus.statusList.get(position).created_at;
+            final Date date = new Date(weiboTime);
+            SimpleDateFormat sdformat = new SimpleDateFormat("MM/dd/yy h:mmaa");
+            String UserTime = sdformat.format(date);
 
-            if(holder instanceof OriginViewHolder) {
+            ImageLoader.getInstance().displayImage(mStatus.statusList.get(position).user.avatar_hd, ((OriginViewHolder) holder).profile_img);
+            ((OriginViewHolder) holder).profile_name.setText(mStatus.statusList.get(position).user.screen_name);
+            ((OriginViewHolder) holder).profile_time.setText(UserTime);
+            ((OriginViewHolder) holder).profile_from.setText(mStatus.statusList.get(position).user.location);
+            ((OriginViewHolder) holder).profile_content.setText(mStatus.statusList.get(position).text);
+            ((OriginViewHolder) holder).reposts_count.setText(mStatus.statusList.get(position).reposts_count + "");
+            ((OriginViewHolder) holder).comments_count.setText(mStatus.statusList.get(position).comments_count + "");
+            ((OriginViewHolder) holder).attitudes_count.setText(mStatus.statusList.get(position).attitudes_count + "");
 
-                Log.d("1111", String.valueOf(statusCount));
-                Log.d("2222", String.valueOf(followsCount));
-                Log.d("3333", String.valueOf(friendsCount));
-                weiboTime = mStatus.statusList.get(position).created_at;
-                Date date = new Date(weiboTime);
-                SimpleDateFormat sdformat = new SimpleDateFormat("MM/dd/yy h:mmaa");
-                String UserTime = sdformat.format(date);
-                Log.d("Time", UserTime);
-
-                ImageLoader.getInstance().displayImage(mStatus.statusList.get(position).user.avatar_hd, ((OriginViewHolder) holder).profile_img);
-                ((OriginViewHolder) holder).profile_name.setText(mStatus.statusList.get(position).user.screen_name);
-                ((OriginViewHolder) holder).profile_time.setText(UserTime);
-                ((OriginViewHolder) holder).profile_from.setText(mStatus.statusList.get(position).user.location);
-                ((OriginViewHolder) holder).profile_content.setText(mStatus.statusList.get(position).text);
-                ((OriginViewHolder) holder).reposts_count.setText(mStatus.statusList.get(position).reposts_count + "");
-                ((OriginViewHolder) holder).comments_count.setText(mStatus.statusList.get(position).comments_count + "");
-                ((OriginViewHolder) holder).attitudes_count.setText(mStatus.statusList.get(position).attitudes_count + "");
-
-                final ArrayList<String>imageDatas = mStatus.statusList.get(position).pic_urls;
-                    GridView gridView = ((OriginViewHolder)holder).gridView;
-                    gridView.setAdapter(new GridViewAdapter(mContext,position,imageDatas));
-
-                ((OriginViewHolder) holder).profile_img.setTag(mStatus.statusList.get(position).user.avatar_hd);
+            ((OriginViewHolder) holder).profile_img.setTag(mStatus.statusList.get(position).user.avatar_hd);
+            ((OriginViewHolder) holder).profile_img.setImageResource(R.drawable.ic_logo);
+            if (((OriginViewHolder) holder).profile_img.getTag() != null && ((OriginViewHolder) holder).profile_img.getTag().equals(mStatus.statusList.get(position).user.avatar_hd)) {
                 ((OriginViewHolder) holder).profile_img.setImageResource(R.drawable.ic_logo);
-                if (((OriginViewHolder) holder).profile_img.getTag() != null && ((OriginViewHolder) holder).profile_img.getTag().equals(mStatus.statusList.get(position).user.avatar_hd)) {
-                    ((OriginViewHolder) holder).profile_img.setImageResource(R.drawable.ic_logo);
+            }
+
+            ((OriginViewHolder) holder).profile_img.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MainActivity.this, UserActivity.class);
+                    intent.putExtra("userId", userId);
+                    intent.putExtra("userImg", userImg);
+                    intent.putExtra("userName", userName);
+                    intent.putExtra("userDesc", userDesc);
+                    intent.putExtra("statusCount", statusCount);
+                    intent.putExtra("followsCount", followsCount);
+                    intent.putExtra("friendsCount", friendsCount);
+                    startActivity(intent);
                 }
+            });
 
-                ((OriginViewHolder) holder).profile_img.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(MainActivity.this, UserActivity.class);
-                        intent.putExtra("userId", userId);
-                        intent.putExtra("userImg", userImg);
-                        intent.putExtra("userName", userName);
-                        intent.putExtra("userDesc", userDesc);
-                        intent.putExtra("statusCount", statusCount);
-                        intent.putExtra("followsCount", followsCount);
-                        intent.putExtra("friendsCount", friendsCount);
-                        startActivity(intent);
-                    }
-                });
+            ((OriginViewHolder) holder).profile_name.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MainActivity.this, UserActivity.class);
+                    intent.putExtra("userId", userId);
+                    intent.putExtra("userImg", userImg);
+                    intent.putExtra("userName", userName);
+                    intent.putExtra("userDesc", userDesc);
+                    intent.putExtra("statusCount", statusCount);
+                    intent.putExtra("followsCount", followsCount);
+                    intent.putExtra("friendsCount", friendsCount);
+                    startActivity(intent);
+                }
+            });
 
-                ((OriginViewHolder) holder).profile_name.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(MainActivity.this, UserActivity.class);
-                        intent.putExtra("userId", userId);
-                        intent.putExtra("userImg", userImg);
-                        intent.putExtra("userName", userName);
-                        intent.putExtra("userDesc", userDesc);
-                        intent.putExtra("statusCount", statusCount);
-                        intent.putExtra("followsCount", followsCount);
-                        intent.putExtra("friendsCount", friendsCount);
-                        startActivity(intent);
-                    }
-                });
-
-                ((OriginViewHolder) holder).gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
-                        View imageView = inflater.inflate(R.layout.dialog_photo,null);
-                        final AlertDialog dialog = new AlertDialog.Builder(MainActivity.this).create();
-                        ImageView img1 = (ImageView)imageView.findViewById(R.id.largeImage);
-                        ImageLoader.getInstance().displayImage(imageDatas.get(position),img1);
-                        dialog.setView(imageView);
-                        dialog.show();
-
-                        imageView.setOnClickListener(new OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                dialog.cancel();
-                            }
-                        });
-                    }
-                });
-
-            } else if (holder instanceof RetweetViewHolder){
+            if(holder instanceof RetweetViewHolder) {
 
                 retweetUserId = mStatus.statusList.get(position).retweeted_status.user.id;
                 retweetUserName = mStatus.statusList.get(position).retweeted_status.user.screen_name;
@@ -262,64 +234,19 @@ public class MainActivity extends FragmentActivity {
                 retweetFriendsCount = mStatus.statusList.get(position).retweeted_status.user.friends_count+"";
                 retweetFollowsCount = mStatus.statusList.get(position).retweeted_status.user.followers_count+"";
 
-                Log.d("DDDDDD",retweetUserDesc);
-
-                weiboTime = mStatus.statusList.get(position).created_at;
-                Date date = new Date(weiboTime);
-                SimpleDateFormat sdformat = new SimpleDateFormat("MM/dd/yy h:mmaa");
-                String UserTime = sdformat.format(date);
-
-                ImageLoader.getInstance().displayImage(mStatus.statusList.get(position).user.avatar_hd, ((RetweetViewHolder) holder).profile_img);
-                ((RetweetViewHolder) holder).profile_name.setText(mStatus.statusList.get(position).user.screen_name);
-                ((RetweetViewHolder) holder).profile_time.setText(UserTime);
-                ((RetweetViewHolder) holder).profile_from.setText(mStatus.statusList.get(position).user.location);
-                ((RetweetViewHolder) holder).profile_content.setText(mStatus.statusList.get(position).text);
                 ((RetweetViewHolder) holder).retweet_content.setText(mStatus.statusList.get(position).retweeted_status.text);
                 ((RetweetViewHolder) holder).oringin_name.setText(mStatus.statusList.get(position).retweeted_status.user.screen_name);
-                ((RetweetViewHolder) holder).reposts_count.setText(mStatus.statusList.get(position).reposts_count + "");
-                ((RetweetViewHolder) holder).comments_count.setText(mStatus.statusList.get(position).comments_count + "");
-                ((RetweetViewHolder) holder).attitudes_count.setText(mStatus.statusList.get(position).attitudes_count + "");
                 ImageLoader.getInstance().displayImage(mStatus.statusList.get(position).retweeted_status.user.avatar_hd,((RetweetViewHolder)holder).oringin_logo);
 
                 final ArrayList<String>imageDatas = mStatus.statusList.get(position).retweeted_status.pic_urls;
-                    GridView gridView = ((RetweetViewHolder)holder).ret_gridView;
-                    gridView.setAdapter(new GridViewAdapter(mContext,position,imageDatas));
+                NineImgView nineImgView = ((RetweetViewHolder)holder).ret_imageView;
+                nineImgView.setMaxChildCount(imageDatas == null ?0 : imageDatas.size());
+                nineImgView.setImgs(imageDatas,imageDatas == null ? 0 : imageDatas.size());
 
-                ((RetweetViewHolder) holder).profile_img.setTag(mStatus.statusList.get(position).user.avatar_hd);
-                ((RetweetViewHolder) holder).profile_img.setImageResource(R.drawable.ic_logo);
-                if (((RetweetViewHolder) holder).profile_img.getTag() != null && ((RetweetViewHolder) holder).profile_img.getTag().equals(mStatus.statusList.get(position).user.avatar_hd)) {
-                    ((RetweetViewHolder) holder).profile_img.setImageResource(R.drawable.ic_logo);
-                }
+                ClickCallback clickCallback = new ClickCallback();
+                ((OriginViewHolder) holder).callback = clickCallback;
+                ((RetweetViewHolder)holder).ret_imageView.setClickCallback(((OriginViewHolder) holder).callback);
 
-                ((RetweetViewHolder) holder).profile_img.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(MainActivity.this, UserActivity.class);
-                        intent.putExtra("userId", userId);
-                        intent.putExtra("userImg", userImg);
-                        intent.putExtra("userName", userName);
-                        intent.putExtra("userDesc", userDesc);
-                        intent.putExtra("statusCount", statusCount);
-                        intent.putExtra("followsCount", followsCount);
-                        intent.putExtra("friendsCount", friendsCount);
-                        startActivity(intent);
-                    }
-                });
-
-                ((RetweetViewHolder) holder).profile_name.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(MainActivity.this, UserActivity.class);
-                        intent.putExtra("userId", userId);
-                        intent.putExtra("userImg", userImg);
-                        intent.putExtra("userName", userName);
-                        intent.putExtra("userDesc", userDesc);
-                        intent.putExtra("statusCount", statusCount);
-                        intent.putExtra("followsCount", followsCount);
-                        intent.putExtra("friendsCount", friendsCount);
-                        startActivity(intent);
-                    }
-                });
 
                 ((RetweetViewHolder) holder).oringin_name.setOnClickListener(new OnClickListener() {
                     @Override
@@ -351,25 +278,22 @@ public class MainActivity extends FragmentActivity {
                     }
                 });
 
-                ((RetweetViewHolder) holder).ret_gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
-                        View imageView = inflater.inflate(R.layout.dialog_photo, null);
-                        final AlertDialog dialog = new AlertDialog.Builder(MainActivity.this).create();
-                        ImageView img2 = (ImageView) imageView.findViewById(R.id.largeImage);
-                        ImageLoader.getInstance().displayImage(imageDatas.get(position),img2);
-                        dialog.setView(imageView);
-                        dialog.show();
+            } else if (holder instanceof OriginViewHolder){
 
-                        imageView.setOnClickListener(new OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                dialog.cancel();
-                            }
-                        });
-                    }
-                } );
+                Log.d("1111", String.valueOf(statusCount));
+                Log.d("2222", String.valueOf(followsCount));
+                Log.d("3333", String.valueOf(friendsCount));
+
+                final ArrayList<String>imageDatas = mStatus.statusList.get(position).pic_urls;
+                Log.d("ImageDatas", String.valueOf(imageDatas));
+                final NineImgView nineImgView = ((OriginViewHolder)holder).nineImgView;
+                nineImgView.setMaxChildCount(imageDatas == null ? 0 : imageDatas.size());
+                nineImgView.setImgs(imageDatas,imageDatas == null ? 0 : imageDatas.size());
+
+                ClickCallback clickCallback = new ClickCallback();
+                ((OriginViewHolder) holder).callback = clickCallback;
+                ((OriginViewHolder)holder).nineImgView.setClickCallback(((OriginViewHolder) holder).callback);
+
             }
         }
 
@@ -401,7 +325,8 @@ public class MainActivity extends FragmentActivity {
             public TextView reposts_count;
             public TextView comments_count;
             public TextView attitudes_count;
-            public GridView gridView;
+            public NineImgView nineImgView;
+            public ClickCallback callback;
 
             public OriginViewHolder(View view) {
                 super(view);
@@ -414,42 +339,52 @@ public class MainActivity extends FragmentActivity {
                 reposts_count = (TextView) view.findViewById(R.id.redirect);
                 comments_count = (TextView) view.findViewById(R.id.comment);
                 attitudes_count = (TextView) view.findViewById(R.id.attitude);
-                gridView = (GridView)view.findViewById(R.id.grid_view);
+                nineImgView = (NineImgView) view.findViewById(R.id.nineImgView);
+
             }
         }
 
-        class RetweetViewHolder extends RecyclerView.ViewHolder {
+        class RetweetViewHolder extends OriginViewHolder {
 
-            public ImageView profile_img;
-            public TextView profile_name;
-            public TextView profile_time;
-            public TextView profile_from;
-            public TextView profile_content;
+
             public TextView oringin_name;
             public ImageView oringin_logo;
-            public TextView reposts_count;
-            public TextView comments_count;
-            public TextView attitudes_count;
-            public GridView ret_gridView;
+            public NineImgView ret_imageView;
             public RelativeLayout retweet_weibo_layout;
             public TextView retweet_content;
 
             public RetweetViewHolder(View view) {
                 super(view);
                 retweet_weibo_layout = (RelativeLayout) view.findViewById(R.id.retweet_weibo_layout);
-                profile_img = (ImageView) view.findViewById(R.id.head_logo);
-                profile_name = (TextView) view.findViewById(R.id.tv_Name);
-                profile_time = (TextView) view.findViewById(R.id.tv_Time);
-                profile_from = (TextView) view.findViewById(R.id.tv_From);
-                profile_content = (TextView) view.findViewById(R.id.tv_content);
                 oringin_logo = (ImageView) view.findViewById(R.id.oringin_head_logo);
                 oringin_name = (TextView) view.findViewById(R.id.origin_Name);
-                reposts_count = (TextView) view.findViewById(R.id.redirect);
-                comments_count = (TextView) view.findViewById(R.id.comment);
-                attitudes_count = (TextView) view.findViewById(R.id.attitude);
-                ret_gridView = (GridView)view.findViewById(R.id.retweet_grid_view);
+                ret_imageView = (NineImgView) view.findViewById(R.id.nineImgView);
                 retweet_content = (TextView)view.findViewById(R.id.retweet_content);
             }
+        }
+    }
+
+    class ClickCallback implements NineImgView.ClickCallback{
+
+        @Override
+        public void callback(int index, ArrayList<String> imageDatas) {
+            Log.d("CCClick", "true");
+            Log.d("index", String.valueOf(index));
+            Log.d("AAArrayList", String.valueOf(imageDatas));
+            LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
+            View imageView = inflater.inflate(R.layout.dialog_photo,null);
+            final AlertDialog dialog = new AlertDialog.Builder(MainActivity.this).create();
+            ImageView img = (ImageView)imageView.findViewById(R.id.largeImage);
+            ImageLoader.getInstance().displayImage(imageDatas.get(index).replace("thumbnail", "large"),img);
+            dialog.setView(imageView);
+            dialog.show();
+
+            imageView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.cancel();
+                }
+            });
         }
     }
 
@@ -529,6 +464,7 @@ public class MainActivity extends FragmentActivity {
             }
         });
     }
+
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

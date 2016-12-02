@@ -79,12 +79,18 @@
             <!--android:layout_width="wrap_content"-->
             <!--android:layout_height="wrap_content" />-->
 
-        <com.dongwei.weibotest3.NineGridView
-            android:id="@+id/grid_view"
-            android:numColumns="3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        </com.dongwei.weibotest3.NineGridView>
+        <!--<com.dongwei.weibotest3.NineGridView-->
+            <!--android:id="@+id/grid_view"-->
+            <!--android:numColumns="3"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content">-->
+        <!--</com.dongwei.weibotest3.NineGridView>-->
+
+        <com.dongwei.weibotest3.NineImgView
+            android:id="@+id/nineImgView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </com.dongwei.weibotest3.NineImgView>
 
         <include layout="@layout/item_weibo_bottom"/>
     </LinearLayout>
